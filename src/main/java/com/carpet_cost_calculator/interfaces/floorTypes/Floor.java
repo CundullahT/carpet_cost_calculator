@@ -1,4 +1,9 @@
 package com.carpet_cost_calculator.interfaces.floorTypes;
 
-public class Floor {
+import java.math.BigDecimal;
+
+public interface Floor {
+
+    BigDecimal getArea();
+
 }
