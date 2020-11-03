@@ -14,21 +14,66 @@ public class Calculator {
 
     @Qualifier("carpetTX")
     @Autowired
-    private Carpet carpet;
+    private Carpet carpetTX;
+
+    @Qualifier("carpetVA")
+    @Autowired
+    private Carpet carpetVA;
 
     @Qualifier("bedroom")
     @Autowired
-    private Floor floor;
+    private Floor floorBedroom;
 
-    public String getTotalCarpetCost(City city) throws Exception {
+    @Qualifier("kitchen")
+    @Autowired
+    private Floor floorKitchen;
 
-        BigDecimal cost = carpet.getSqFtPrice(city).multiply(floor.getArea());
+    @Qualifier("livingRoom")
+    @Autowired
+    private Floor floorLivingRoom;
+
+    public String getTotalCarpetCost(City city, String floor) throws Exception {
+
+        BigDecimal cost = getState(city).getSqFtPrice(city).multiply(getFloor(floor).getArea());
 
         if(cost.compareTo(BigDecimal.ZERO) == 0){
             throw new Exception("This city does not exist");
         }
 
         return "Total Cost for Carpet : " + cost;
+
+    }
+
+    public Carpet getState(City city){
+
+        while(true){
+
+            if(city == City.MCLEAN || city == City.ARLINGTON || city == City.FAIRFAX){
+                return carpetVA;
+            }else if(city == City.DALLAS || city == City.AUSTIN || city == City.SAN_ANTONIO){
+                return carpetTX;
+            }
+
+        }
+
+    }
+
+    public Floor getFloor(String floorStr){
+
+        while (true){
+
+            switch (floorStr.toLowerCase().replace(" ","")){
+
+                case "bedroom":
+                    return floorBedroom;
+                case "kitchen":
+                    return floorKitchen;
+                case "livingroom":
+                    return floorLivingRoom;
+
+            }
+
+        }
 
     }
 
